@@ -10,7 +10,18 @@ void db;
 
 const app = express();
 
-app.use(cors());
+// CORS — restrict to frontend origin in production
+const corsOrigin = process.env.CORS_ORIGIN;
+app.use(
+  cors(
+    corsOrigin
+      ? {
+        origin: corsOrigin.split(",").map((o) => o.trim()),
+        methods: ["GET", "POST", "PATCH", "DELETE"],
+      }
+      : undefined
+  )
+);
 app.use(express.json());
 
 app.use("/api/issues", issuesRouter);
