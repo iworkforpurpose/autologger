@@ -19,7 +19,13 @@ const priorityBadgeClasses = {
 }
 
 function formatDate(dateText) {
-  const parsed = new Date(dateText)
+  if (!dateText) return dateText
+  // SQLite CURRENT_TIMESTAMP stores UTC without a timezone indicator.
+  // Append 'Z' so JS Date treats it as UTC, then toLocaleString() converts to local time.
+  const normalized = String(dateText).includes('Z') || String(dateText).includes('+')
+    ? dateText
+    : dateText + 'Z'
+  const parsed = new Date(normalized)
   if (Number.isNaN(parsed.getTime())) return dateText
   return parsed.toLocaleString()
 }
@@ -134,8 +140,8 @@ export default function IssueDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-20 dark:border-gray-700 dark:bg-gray-800">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-slate-600 dark:border-gray-700 dark:border-t-gray-300" />
+      <div className="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-20 dark:border-slate-700 dark:bg-slate-800">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-slate-600 dark:border-slate-700 dark:border-t-slate-300" />
       </div>
     )
   }
@@ -146,7 +152,7 @@ export default function IssueDetail() {
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
         >
           Back to Dashboard
         </button>
@@ -168,53 +174,52 @@ export default function IssueDetail() {
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
         >
           Back to Dashboard
         </button>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{issue.title}</h2>
-        <p className="mt-3 whitespace-pre-wrap text-slate-700 dark:text-gray-300">{issue.description}</p>
+        <p className="mt-3 whitespace-pre-wrap text-slate-700 dark:text-slate-400">{issue.description}</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400">Project</p>
-            <p className="mt-1 text-sm text-slate-800 dark:text-gray-200">{issue.project}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Project</p>
+            <p className="mt-1 text-sm text-slate-800 dark:text-slate-200">{issue.project}</p>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400">Priority</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Priority</p>
             <span
-              className={`mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
-                priorityBadgeClasses[issue.priority] ||
+              className={`mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${priorityBadgeClasses[issue.priority] ||
                 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-100'
-              }`}
+                }`}
             >
               {issue.priority}
             </span>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400">Assignee</p>
-            <p className="mt-1 text-sm text-slate-800 dark:text-gray-200">{issue.assignee}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Assignee</p>
+            <p className="mt-1 text-sm text-slate-800 dark:text-slate-200">{issue.assignee}</p>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400">Created</p>
-            <p className="mt-1 text-sm text-slate-800 dark:text-gray-200">{formatDate(issue.created_at)}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Created</p>
+            <p className="mt-1 text-sm text-slate-800 dark:text-slate-200">{formatDate(issue.created_at)}</p>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400">Updated</p>
-            <p className="mt-1 text-sm text-slate-800 dark:text-gray-200">{formatDate(issue.updated_at)}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Updated</p>
+            <p className="mt-1 text-sm text-slate-800 dark:text-slate-200">{formatDate(issue.updated_at)}</p>
           </div>
 
           <div>
             <label
               htmlFor="status"
-              className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-gray-400"
+              className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
             >
               Status
             </label>
@@ -224,7 +229,7 @@ export default function IssueDetail() {
                 value={issue.status}
                 onChange={handleStatusChange}
                 disabled={isSavingStatus}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 disabled:cursor-not-allowed disabled:opacity-70 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 disabled:cursor-not-allowed disabled:opacity-70 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:ring-slate-500"
               >
                 {STATUS_OPTIONS.map((status) => (
                   <option key={status} value={status}>
@@ -233,10 +238,9 @@ export default function IssueDetail() {
                 ))}
               </select>
               <span
-                className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
-                  statusBadgeClasses[issue.status] ||
+                className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${statusBadgeClasses[issue.status] ||
                   'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-100'
-                }`}
+                  }`}
               >
                 {issue.status}
               </span>
@@ -246,7 +250,7 @@ export default function IssueDetail() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Comments</h3>
 
         <div className="mt-4 space-y-3">
@@ -254,21 +258,21 @@ export default function IssueDetail() {
             issue.comments.map((comment) => (
               <article
                 key={comment.id}
-                className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-gray-700 dark:bg-gray-700/50"
+                className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-700/50"
               >
-                <p className="whitespace-pre-wrap text-sm text-slate-800 dark:text-gray-200">{comment.text}</p>
-                <p className="mt-2 text-xs text-slate-500 dark:text-gray-400">{formatDate(comment.created_at)}</p>
+                <p className="whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{comment.text}</p>
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{formatDate(comment.created_at)}</p>
               </article>
             ))
           ) : (
-            <p className="rounded-lg border border-dashed border-slate-300 px-3 py-6 text-center text-sm text-slate-500 dark:border-gray-600 dark:text-gray-400">
+            <p className="rounded-lg border border-dashed border-slate-300 px-3 py-6 text-center text-sm text-slate-500 dark:border-slate-600 dark:text-slate-400">
               No comments yet.
             </p>
           )}
         </div>
 
         <form onSubmit={handleAddComment} className="mt-5 space-y-3">
-          <label htmlFor="new-comment" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
+          <label htmlFor="new-comment" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             New Comment
           </label>
           <textarea
@@ -276,7 +280,7 @@ export default function IssueDetail() {
             rows={4}
             value={commentText}
             onChange={(event) => setCommentText(event.target.value)}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
+            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:ring-slate-500"
             placeholder="Write a comment..."
           />
           {commentError ? <p className="text-sm text-red-600">{commentError}</p> : null}

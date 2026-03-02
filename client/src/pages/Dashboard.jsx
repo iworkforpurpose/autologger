@@ -62,22 +62,22 @@ export default function Dashboard() {
   // Status Colors
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Open': return 'bg-blue-100 text-blue-800';
-      case 'In Progress': return 'bg-yellow-100 text-yellow-800';
-      case 'Resolved': return 'bg-green-100 text-green-800';
-      case 'Closed': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Open': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200';
+      case 'In Progress': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/60 dark:text-yellow-200';
+      case 'Resolved': return 'bg-green-100 text-green-800 dark:bg-green-900/60 dark:text-green-200';
+      case 'Closed': return 'bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-100';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-100';
     }
   };
 
   // Priority Colors
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'Low': return 'bg-gray-100 text-gray-600';
-      case 'Medium': return 'bg-blue-100 text-blue-600';
-      case 'High': return 'bg-orange-100 text-orange-600';
-      case 'Critical': return 'bg-red-100 text-red-600';
-      default: return 'bg-gray-100 text-gray-600';
+      case 'Low': return 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-slate-100';
+      case 'Medium': return 'bg-blue-100 text-blue-600 dark:bg-blue-900/60 dark:text-blue-200';
+      case 'High': return 'bg-orange-100 text-orange-600 dark:bg-orange-900/60 dark:text-orange-200';
+      case 'Critical': return 'bg-red-100 text-red-600 dark:bg-red-900/60 dark:text-red-200';
+      default: return 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-slate-100';
     }
   };
 
@@ -102,11 +102,17 @@ export default function Dashboard() {
     { name: 'Delta', count: issues.filter((i) => i.project === 'Delta').length, color: '#f59e0b' },
   ];
 
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  const gridStroke = isDark ? '#334155' : '#e2e8f0';
+  const tickFill = isDark ? '#94a3b8' : '#64748b';
+  const tooltipCursor = isDark ? '#1e293b' : '#f1f5f9';
+  const tooltipBg = isDark ? '#1e293b' : '#ffffff';
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Issues Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Issues Dashboard</h1>
       </div>
 
       {/* Status Summary */}
@@ -114,27 +120,36 @@ export default function Dashboard() {
         {statusCards.map(({ label, count, icon: Icon, color }) => (
           <div
             key={label}
-            className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center gap-4"
+            className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center gap-4 dark:bg-slate-800 dark:border-slate-700"
           >
             <Icon className={`w-8 h-8 ${color}`} strokeWidth={2.5} />
             <div className="flex flex-col">
-              <span className="text-3xl font-extrabold text-slate-900 leading-none">{count}</span>
-              <span className="text-sm font-medium text-slate-500 mt-1">{label}</span>
+              <span className="text-3xl font-extrabold text-slate-900 leading-none dark:text-white">{count}</span>
+              <span className="text-sm font-medium text-slate-500 mt-1 dark:text-slate-400">{label}</span>
             </div>
           </div>
         ))}
       </div>
 
       {/* Issues by Project Chart */}
-      <div className="bg-white p-5 border border-slate-200 rounded-xl shadow-sm mb-8">
-        <h2 className="text-lg font-bold text-slate-900 mb-4">Issues by Project</h2>
+      <div className="bg-white p-5 border border-slate-200 rounded-xl shadow-sm mb-8 dark:bg-slate-800 dark:border-slate-700">
+        <h2 className="text-lg font-bold text-slate-900 mb-4 dark:text-white">Issues by Project</h2>
         <div className="h-64 w-full md:w-1/2">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} dy={10} />
-              <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} dx={-10} />
-              <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: tickFill }} dy={10} />
+              <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: tickFill }} dx={-10} />
+              <Tooltip
+                cursor={{ fill: tooltipCursor }}
+                contentStyle={{
+                  borderRadius: '8px',
+                  border: 'none',
+                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                  backgroundColor: tooltipBg,
+                  color: isDark ? '#f1f5f9' : '#0f172a',
+                }}
+              />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {chartData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
@@ -146,20 +161,20 @@ export default function Dashboard() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8 flex flex-wrap gap-4 items-center">
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8 flex flex-wrap gap-4 items-center dark:bg-slate-800 dark:border-slate-700">
         <input
           type="text"
           name="search"
           value={searchInput}
           placeholder="Search issues..."
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 placeholder-gray-500 min-w-[200px]"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 placeholder-gray-500 min-w-[200px] dark:bg-slate-900 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
           onChange={(e) => setSearchInput(e.target.value)}
         />
         <select
           name="project"
           value={filters.project}
           onChange={handleFilterChange}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 dark:bg-slate-900 dark:border-slate-600 dark:text-white"
         >
           <option value="All">All Projects</option>
           <option value="Alpha">Alpha</option>
@@ -171,7 +186,7 @@ export default function Dashboard() {
           name="status"
           value={filters.status}
           onChange={handleFilterChange}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 dark:bg-slate-900 dark:border-slate-600 dark:text-white"
         >
           <option value="All">All Statuses</option>
           <option value="Open">Open</option>
@@ -183,7 +198,7 @@ export default function Dashboard() {
           name="priority"
           value={filters.priority}
           onChange={handleFilterChange}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 dark:bg-slate-900 dark:border-slate-600 dark:text-white"
         >
           <option value="All">All Priorities</option>
           <option value="Low">Low</option>
@@ -195,7 +210,7 @@ export default function Dashboard() {
           name="assignee"
           value={filters.assignee}
           onChange={handleFilterChange}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 dark:bg-slate-900 dark:border-slate-600 dark:text-white"
         >
           <option value="All">All Assignees</option>
           <option value="Alice Johnson">Alice Johnson</option>
@@ -208,22 +223,22 @@ export default function Dashboard() {
 
       {/* Content Area */}
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Loading issues...</div>
+        <div className="text-center py-12 text-gray-500 dark:text-slate-400">Loading issues...</div>
       ) : error ? (
         <div className="text-center py-12 text-red-500">{error}</div>
       ) : issues.length === 0 ? (
-        <div className="text-center py-12 text-gray-500 bg-white rounded-lg border border-gray-200">No issues found. Create one.</div>
+        <div className="text-center py-12 text-gray-500 bg-white rounded-lg border border-gray-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">No issues found. Create one.</div>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {issues.map(issue => (
             <li
               key={issue.id}
               onClick={() => navigate(`/issues/${issue.id}`)}
-              className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-[280px]"
+              className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-[280px] dark:bg-slate-800 dark:border-slate-700"
             >
               {/* Card Header (Badges) */}
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded-md">
+              <div className="p-4 border-b border-gray-100 flex justify-between items-center dark:border-slate-700">
+                <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded-md dark:bg-slate-700 dark:text-slate-300">
                   {issue.project}
                 </span>
                 <div className="flex gap-2">
@@ -238,18 +253,18 @@ export default function Dashboard() {
 
               {/* Card Body (Title & Desc) */}
               <div className="p-4 flex-grow overflow-hidden flex flex-col gap-2">
-                <h3 className="text-lg font-bold text-gray-900 leading-tight line-clamp-2">
+                <h3 className="text-lg font-bold text-gray-900 leading-tight line-clamp-2 dark:text-white">
                   {issue.title}
                 </h3>
-                <p className="text-sm text-gray-500 line-clamp-3">
+                <p className="text-sm text-gray-500 line-clamp-3 dark:text-slate-400">
                   {issue.description}
                 </p>
               </div>
 
               {/* Card Footer (Assignee & Date) */}
-              <div className="px-4 py-3 bg-gray-50 mt-auto flex justify-between items-center border-t border-gray-100">
-                <span className="text-sm font-medium text-gray-700">{issue.assignee}</span>
-                <span className="text-xs text-gray-500">{new Date(issue.created_at).toLocaleDateString()}</span>
+              <div className="px-4 py-3 bg-gray-50 mt-auto flex justify-between items-center border-t border-gray-100 dark:bg-slate-800/50 dark:border-slate-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">{issue.assignee}</span>
+                <span className="text-xs text-gray-500 dark:text-slate-400">{new Date(issue.created_at + 'Z').toLocaleDateString()}</span>
               </div>
             </li>
           ))}
