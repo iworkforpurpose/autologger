@@ -96,21 +96,21 @@ export default function NewIssue() {
 
   return (
     <section className="mx-auto w-full max-w-3xl">
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Create New Issue</h1>
-        <p className="mt-1 text-sm text-slate-600">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Create New Issue</h1>
+        <p className="mt-1 text-sm text-slate-600 dark:text-gray-300">
           Provide issue details and assign ownership before submission.
         </p>
 
         {formError ? (
-          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
             {formError}
           </div>
         ) : null}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="title" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
               Title
             </label>
             <input
@@ -120,13 +120,13 @@ export default function NewIssue() {
               value={form.title}
               onChange={handleChange}
               maxLength={150}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
             />
             {errors.title ? <p className="mt-1 text-sm text-red-600">{errors.title}</p> : null}
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="description" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
               Description
             </label>
             <textarea
@@ -135,7 +135,7 @@ export default function NewIssue() {
               rows={5}
               value={form.description}
               onChange={handleChange}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
             />
             {errors.description ? (
               <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -144,7 +144,7 @@ export default function NewIssue() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="project" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="project" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
                 Project
               </label>
               <select
@@ -152,7 +152,7 @@ export default function NewIssue() {
                 name="project"
                 value={form.project}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
               >
                 {PROJECTS.map((project) => (
                   <option key={project} value={project}>
@@ -164,7 +164,7 @@ export default function NewIssue() {
             </div>
 
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="priority" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
                 Priority
               </label>
               <select
@@ -172,7 +172,7 @@ export default function NewIssue() {
                 name="priority"
                 value={form.priority}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
               >
                 {PRIORITIES.map((priority) => (
                   <option key={priority} value={priority}>
@@ -186,7 +186,7 @@ export default function NewIssue() {
             </div>
 
             <div>
-              <label htmlFor="assignee" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="assignee" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
                 Assignee
               </label>
               <select
@@ -194,7 +194,7 @@ export default function NewIssue() {
                 name="assignee"
                 value={form.assignee}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
               >
                 {ASSIGNEES.map((assignee) => (
                   <option key={assignee} value={assignee}>
@@ -208,7 +208,7 @@ export default function NewIssue() {
             </div>
 
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="status" className="block text-sm font-medium text-slate-700 dark:text-gray-200">
                 Status
               </label>
               <select
@@ -216,7 +216,7 @@ export default function NewIssue() {
                 name="status"
                 value={form.status}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2"
+                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none ring-slate-300 focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:ring-gray-500"
               >
                 {STATUSES.map((status) => (
                   <option key={status} value={status}>
@@ -232,7 +232,7 @@ export default function NewIssue() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70"
+              className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               {isSubmitting ? (
                 <>
@@ -247,7 +247,7 @@ export default function NewIssue() {
               type="button"
               onClick={() => navigate('/')}
               disabled={isSubmitting}
-              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
             >
               Cancel
             </button>
