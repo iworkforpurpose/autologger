@@ -6,7 +6,13 @@ const issuesRouter = require("./routes/issues");
 const commentsRouter = require("./routes/comments");
 
 const db = importedDb.default || importedDb;
-void db;
+
+// Auto-seed if the database is empty (useful for fresh deployments)
+const issueCount = db.prepare("SELECT COUNT(*) as count FROM issues").get();
+if (issueCount.count === 0) {
+  console.log("Empty database detected — auto-seeding sample data...");
+  require("./seed");
+}
 
 const app = express();
 
