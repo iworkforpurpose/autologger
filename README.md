@@ -2,6 +2,8 @@
 
 A full-stack issue tracking application built with React and Express. Track bugs, feature requests, and tasks across projects with real-time filtering, status management, and visual analytics.
 
+### 🚀 [Live Demo → autologger-eight.vercel.app](https://autologger-eight.vercel.app/)
+
 ![Light Mode Dashboard](https://img.shields.io/badge/theme-light-f8fafc?style=flat-square) ![Dark Mode](https://img.shields.io/badge/theme-dark-0f172a?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ---
